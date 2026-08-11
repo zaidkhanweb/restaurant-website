@@ -1,0 +1,109 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-display: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --font-script: "Great Vibes", "Dancing Script", cursive;
+  --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 12px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-cream: var(--cream);
+  --color-orange-glow: var(--orange-glow);
+}
+
+:root {
+  --radius: 0.75rem;
+
+  /* Flavoria-style dark + orange palette */
+  --background: oklch(0.14 0.005 40);         /* near-black */
+  --foreground: oklch(0.97 0.005 80);          /* cream white */
+  --card: oklch(0.18 0.008 40);
+  --card-foreground: oklch(0.97 0.005 80);
+  --primary: oklch(0.72 0.19 47);              /* vivid orange */
+  --primary-foreground: oklch(0.14 0.005 40);
+  --secondary: oklch(0.22 0.01 40);
+  --secondary-foreground: oklch(0.97 0.005 80);
+  --muted: oklch(0.22 0.01 40);
+  --muted-foreground: oklch(0.72 0.02 70);
+  --accent: oklch(0.75 0.18 55);
+  --accent-foreground: oklch(0.14 0.005 40);
+  --border: oklch(0.3 0.01 60 / 30%);
+
+  --cream: oklch(0.95 0.02 85);
+  --orange-glow: oklch(0.76 0.2 48);
+}
+
+@layer base {
+  * { border-color: var(--color-border); }
+  html { scroll-behavior: smooth; }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: -0.01em; }
+}
+
+@utility script { font-family: var(--font-script); font-weight: 400; }
+@utility eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--primary);
+  font-weight: 500;
+}
+@utility btn-primary {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 0.5rem; padding: 0.85rem 1.75rem;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border-radius: 999px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+  box-shadow: 0 12px 30px -10px oklch(0.72 0.19 47 / 0.55);
+}
+@utility btn-primary-hover {
+  background: var(--orange-glow);
+  transform: translateY(-2px);
+}
+@utility btn-ghost {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 0.5rem; padding: 0.85rem 1.75rem;
+  border: 1px solid var(--foreground);
+  color: var(--foreground);
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border-radius: 999px;
+  transition: all 0.25s ease;
+}
+@utility divider-dashes {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  color: var(--primary);
+}
