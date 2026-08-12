@@ -79,16 +79,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Cafeteria America — Modern American Kitchen & Bar" },
       { name: "description", content: "Cafeteria America is a modern American restaurant serving elevated classics, craft cocktails and unforgettable evenings in Los Angeles." },
-      { name: "author", content: "Lovable" },
       { property: "og:title", content: "Cafeteria America — Modern American Kitchen & Bar" },
       { property: "og:description", content: "Cafeteria America is a modern American restaurant serving elevated classics, craft cocktails and unforgettable evenings in Los Angeles." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
       { name: "twitter:title", content: "Cafeteria America — Modern American Kitchen & Bar" },
       { name: "twitter:description", content: "Cafeteria America is a modern American restaurant serving elevated classics, craft cocktails and unforgettable evenings in Los Angeles." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/9dae7206-3216-4fae-a337-6982f0cc6ec3/id-preview-d85e12d2--d65d3ad6-459d-491d-8a51-8d5d1e3ede2e.lovable.app-1785157359551.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/9dae7206-3216-4fae-a337-6982f0cc6ec3/id-preview-d85e12d2--d65d3ad6-459d-491d-8a51-8d5d1e3ede2e.lovable.app-1785157359551.png" },
+      // TODO: add a real social-preview image (e.g. /social-preview.jpg in the public folder)
+      // and reference it here as og:image / twitter:image once you have real restaurant photos.
     ],
     links: [
       { rel: "stylesheet", href: appCss },
