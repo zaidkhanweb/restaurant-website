@@ -39,8 +39,8 @@ export function ProductModal({ product, open, onOpenChange, onAddToCart }: Produ
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg w-[calc(100%-2rem)] sm:w-full rounded-2xl border-border/60 bg-card p-0 overflow-hidden gap-0">
-        <div className="relative aspect-[4/3] w-full overflow-hidden">
+      <DialogContent className="max-w-lg w-[calc(100%-2rem)] sm:w-full max-h-[calc(100dvh-2rem)] flex flex-col rounded-2xl border-border/60 bg-card p-0 overflow-hidden gap-0">
+        <div className="relative h-[clamp(180px,30dvh,300px)] w-full shrink-0 overflow-hidden">
           <img
             src={product.image}
             alt={product.name}
@@ -50,7 +50,7 @@ export function ProductModal({ product, open, onOpenChange, onAddToCart }: Produ
           />
         </div>
 
-        <div className="p-6 max-h-[60vh] overflow-y-auto">
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-6">
           <DialogHeader className="text-left space-y-1">
             <DialogTitle className="text-xl font-bold text-cream">{product.name}</DialogTitle>
             {product.rating && (
@@ -116,12 +116,13 @@ export function ProductModal({ product, open, onOpenChange, onAddToCart }: Produ
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={handleAdd}
-            disabled={justAdded}
-            className="btn-primary hover:[background:var(--orange-glow)] hover:-translate-y-0.5 w-full mt-6 disabled:pointer-events-none disabled:opacity-90"
-          >
+          <div className="sticky bottom-0 -mx-6 -mb-6 mt-6 bg-card px-6 pt-3 pb-6">
+            <button
+              type="button"
+              onClick={handleAdd}
+              disabled={justAdded}
+              className="btn-primary hover:[background:var(--orange-glow)] hover:-translate-y-0.5 w-full disabled:pointer-events-none disabled:opacity-90"
+            >
             {justAdded ? (
               "Added to Cart ✓"
             ) : (
@@ -130,7 +131,8 @@ export function ProductModal({ product, open, onOpenChange, onAddToCart }: Produ
                 Add to Cart — {formatPrice(product.price * quantity)}
               </>
             )}
-          </button>
+            </button>
+          </div>
         </div>
       </DialogContent>
     </Dialog>
