@@ -39,8 +39,8 @@ export function ProductModal({ product, open, onOpenChange, onAddToCart }: Produ
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg w-[calc(100%-2rem)] sm:w-full max-h-[calc(100dvh-2rem)] flex flex-col rounded-2xl border-border/60 bg-card p-0 overflow-hidden gap-0">
-        <div className="relative h-[clamp(180px,30dvh,300px)] w-full shrink-0 overflow-hidden">
+      <DialogContent className="max-w-lg w-[calc(100%-2rem)] sm:w-full max-h-[calc(100vh-1.5rem)] rounded-2xl border-border/60 bg-card p-0 overflow-hidden gap-0">
+        <div className="relative h-[clamp(175px,30vh,240px)] w-full shrink-0 overflow-hidden">
           <img
             src={product.image}
             alt={product.name}
@@ -50,7 +50,7 @@ export function ProductModal({ product, open, onOpenChange, onAddToCart }: Produ
           />
         </div>
 
-        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-6">
+        <div className="p-5 sm:p-6 overflow-hidden">
           <DialogHeader className="text-left space-y-1">
             <DialogTitle className="text-xl font-bold text-cream">{product.name}</DialogTitle>
             {product.rating && (
@@ -70,18 +70,18 @@ export function ProductModal({ product, open, onOpenChange, onAddToCart }: Produ
             </DialogDescription>
           </DialogHeader>
 
-          <p className="mt-4 text-sm text-muted-foreground leading-relaxed">{product.description}</p>
+          <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{product.description}</p>
 
           {product.ingredients && product.ingredients.length > 0 && (
-            <div className="mt-4">
+            <div className="mt-3">
               <div className="text-[0.65rem] tracking-[0.22em] uppercase font-bold text-cream">
                 Ingredients
               </div>
-              <div className="mt-2 flex flex-wrap gap-2">
+              <div className="mt-2 flex flex-wrap gap-1.5">
                 {product.ingredients.map((ing) => (
                   <span
                     key={ing}
-                    className="text-xs px-3 py-1 rounded-full bg-secondary text-secondary-foreground border border-border/60"
+                    className="text-[0.7rem] px-2.5 py-1 rounded-full bg-secondary text-secondary-foreground border border-border/60"
                   >
                     {ing}
                   </span>
@@ -90,7 +90,7 @@ export function ProductModal({ product, open, onOpenChange, onAddToCart }: Produ
             </div>
           )}
 
-          <div className="mt-6 flex items-center justify-between">
+          <div className="mt-4 flex items-center justify-between">
             <span className="text-[0.65rem] tracking-[0.22em] uppercase font-bold text-cream">
               Quantity
             </span>
@@ -99,7 +99,7 @@ export function ProductModal({ product, open, onOpenChange, onAddToCart }: Produ
                 type="button"
                 aria-label="Decrease quantity"
                 onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                className="h-8 w-8 rounded-full flex items-center justify-center text-cream hover:bg-secondary transition-colors disabled:opacity-40 disabled:pointer-events-none"
+                className="h-7 w-7 rounded-full flex items-center justify-center text-cream hover:bg-secondary transition-colors disabled:opacity-40 disabled:pointer-events-none"
                 disabled={quantity <= 1}
               >
                 <Minus size={14} />
@@ -109,20 +109,19 @@ export function ProductModal({ product, open, onOpenChange, onAddToCart }: Produ
                 type="button"
                 aria-label="Increase quantity"
                 onClick={() => setQuantity((q) => Math.min(20, q + 1))}
-                className="h-8 w-8 rounded-full flex items-center justify-center text-cream hover:bg-secondary transition-colors"
+                className="h-7 w-7 rounded-full flex items-center justify-center text-cream hover:bg-secondary transition-colors"
               >
                 <Plus size={14} />
               </button>
             </div>
           </div>
 
-          <div className="sticky bottom-0 -mx-6 -mb-6 mt-6 bg-card px-6 pt-3 pb-6">
-            <button
-              type="button"
-              onClick={handleAdd}
-              disabled={justAdded}
-              className="btn-primary hover:[background:var(--orange-glow)] hover:-translate-y-0.5 w-full disabled:pointer-events-none disabled:opacity-90"
-            >
+          <button
+            type="button"
+            onClick={handleAdd}
+            disabled={justAdded}
+            className="btn-primary hover:[background:var(--orange-glow)] hover:-translate-y-0.5 w-full mt-4 py-3.5 disabled:pointer-events-none disabled:opacity-90"
+          >
             {justAdded ? (
               "Added to Cart ✓"
             ) : (
@@ -131,8 +130,7 @@ export function ProductModal({ product, open, onOpenChange, onAddToCart }: Produ
                 Add to Cart — {formatPrice(product.price * quantity)}
               </>
             )}
-            </button>
-          </div>
+          </button>
         </div>
       </DialogContent>
     </Dialog>
