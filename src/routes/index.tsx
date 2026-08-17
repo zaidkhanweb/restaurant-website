@@ -1,10 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Heart, Leaf, ChefHat, Utensils, Clock, MapPin, Phone, Truck, Star, ArrowRight, Instagram, Facebook, Twitter } from "lucide-react";
+import { useState } from "react";
+import { Heart, Leaf, ChefHat, Utensils, Clock, MapPin, Phone, Truck, Star, ArrowRight, Instagram, Facebook, Twitter, ShoppingBag } from "lucide-react";
 import heroImg from "@/assets/hero.jpg";
 import dish1 from "@/assets/dish-1.jpg";
 import dish2 from "@/assets/dish-2.jpg";
 import dish3 from "@/assets/dish-3.jpg";
 import interiorImg from "@/assets/interior.jpg";
+import { CartProvider, useCart, type Product } from "@/lib/cart-context";
+import { ProductModal } from "@/components/ProductModal";
+import { CartSheet } from "@/components/CartSheet";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -26,19 +30,46 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   return (
+    <CartProvider>
+      <HomeContent />
+    </CartProvider>
+  );
+}
+
+function HomeContent() {
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [isProductModalOpen, setIsProductModalOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const { addItem } = useCart();
+
+  const handleSelectProduct = (product: Product) => {
+    setSelectedProduct(product);
+    setIsProductModalOpen(true);
+  };
+
+  return (
     <main className="min-h-screen">
-      <Nav />
+      <Nav onCartClick={() => setIsCartOpen(true)} />
       <Hero />
       <Features />
-      <Specials />
+      <Specials onSelectProduct={handleSelectProduct} />
       <About />
       <ContactBar />
       <Footer />
+
+      <ProductModal
+        product={selectedProduct}
+        open={isProductModalOpen}
+        onOpenChange={setIsProductModalOpen}
+        onAddToCart={addItem}
+      />
+      <CartSheet open={isCartOpen} onOpenChange={setIsCartOpen} />
     </main>
   );
 }
 
-function Nav() {
+function Nav({ onCartClick }: { onCartClick: () => void }) {
+  const { totalItems } = useCart();
   return (
     <header className="absolute top-0 inset-x-0 z-50">
       <div className="mx-auto max-w-7xl px-6 h-24 flex items-center justify-between">
@@ -67,9 +98,27 @@ function Nav() {
             </a>
           ))}
         </nav>
-        <a href="#contact" className="btn-primary hover:[background:var(--orange-glow)] hover:-translate-y-0.5">
-          Book a Table
-        </a>
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={onCartClick}
+            aria-label="Open cart"
+            className="relative h-11 w-11 rounded-full border border-cream/30 flex items-center justify-center text-cream hover:border-primary hover:text-primary transition-colors"
+          >
+            <ShoppingBag size={18} />
+            {totalItems > 0 && (
+              <span className="absolute -top-1.5 -right-1.5 h-5 min-w-5 px-1 rounded-full bg-primary text-primary-foreground text-[0.65rem] font-bold flex items-center justify-center">
+                {totalItems}
+              </span>
+            )}
+          </button>
+          <a
+            href="#contact"
+            className="hidden sm:inline-flex btn-primary hover:[background:var(--orange-glow)] hover:-translate-y-0.5"
+          >
+            Book a Table
+          </a>
+        </div>
       </div>
     </header>
   );
@@ -141,13 +190,43 @@ function Features() {
   );
 }
 
-const DISHES = [
-  { img: dish2, name: "The America Burger", rating: 4.9, reviews: 132, price: "18.00" },
-  { img: dish3, name: "Braised Short Rib", rating: 4.8, reviews: 98, price: "34.00" },
-  { img: dish1, name: "Sunday Brunch Stack", rating: 4.9, reviews: 110, price: "16.00" },
+const DISHES: Product[] = [
+  {
+    id: "america-burger",
+    image: dish2,
+    name: "The America Burger",
+    rating: 4.9,
+    reviews: 132,
+    price: 18.0,
+    description:
+      "A juicy grilled beef patty stacked with melted cheddar, crisp lettuce, tomato and our signature house sauce, served on a toasted brioche bun.",
+    ingredients: ["Beef Patty", "Cheddar", "Brioche Bun", "House Sauce", "Lettuce", "Tomato"],
+  },
+  {
+    id: "braised-short-rib",
+    image: dish3,
+    name: "Braised Short Rib",
+    rating: 4.8,
+    reviews: 98,
+    price: 34.0,
+    description:
+      "Slow-braised for eight hours until fork-tender, served over creamy mashed potatoes with roasted root vegetables and a rich red wine jus.",
+    ingredients: ["Beef Short Rib", "Mashed Potatoes", "Root Vegetables", "Red Wine Jus"],
+  },
+  {
+    id: "sunday-brunch-stack",
+    image: dish1,
+    name: "Sunday Brunch Stack",
+    rating: 4.9,
+    reviews: 110,
+    price: 16.0,
+    description:
+      "Fluffy buttermilk pancakes layered with fresh seasonal berries, whipped cream and warm maple syrup — the weekend favorite.",
+    ingredients: ["Buttermilk Pancakes", "Seasonal Berries", "Whipped Cream", "Maple Syrup"],
+  },
 ];
 
-function Specials() {
+function Specials({ onSelectProduct }: { onSelectProduct: (product: Product) => void }) {
   return (
     <section id="menu" className="py-28 px-6">
       <div className="mx-auto max-w-7xl">
@@ -155,14 +234,27 @@ function Specials() {
           <div className="eyebrow">— Popular Dishes —</div>
           <h2 className="mt-4 text-4xl sm:text-5xl font-bold">Our Chef's Specials</h2>
           <div className="mt-4 flex justify-center"><DividerDashes /></div>
+          <p className="mt-4 text-sm text-muted-foreground">Tap any dish to view details and add it to your order.</p>
         </div>
 
         <div className="mt-14 grid md:grid-cols-3 gap-6">
           {DISHES.map((d) => (
-            <article key={d.name} className="bg-card rounded-2xl overflow-hidden group border border-border/60">
+            <article
+              key={d.id}
+              onClick={() => onSelectProduct(d)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  onSelectProduct(d);
+                }
+              }}
+              className="bg-card rounded-2xl overflow-hidden group border border-border/60 cursor-pointer transition-shadow hover:shadow-2xl hover:shadow-black/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            >
               <div className="relative aspect-[4/3] overflow-hidden">
                 <img
-                  src={d.img}
+                  src={d.image}
                   alt={d.name}
                   loading="lazy"
                   width={1024}
@@ -171,6 +263,7 @@ function Specials() {
                 />
                 <button
                   aria-label="Favorite"
+                  onClick={(e) => e.stopPropagation()}
                   className="absolute top-4 right-4 h-9 w-9 rounded-full bg-primary flex items-center justify-center text-primary-foreground shadow-lg hover:scale-110 transition"
                 >
                   <Heart size={16} fill="currentColor" />
@@ -186,7 +279,12 @@ function Specials() {
                   </div>
                   <span className="text-muted-foreground text-xs">({d.reviews})</span>
                 </div>
-                <div className="mt-3 text-primary font-bold text-lg">${d.price}</div>
+                <div className="mt-3 flex items-center justify-between">
+                  <span className="text-primary font-bold text-lg">${d.price.toFixed(2)}</span>
+                  <span className="text-[0.65rem] tracking-[0.15em] uppercase font-semibold text-cream/70 group-hover:text-primary transition-colors">
+                    View &amp; Order
+                  </span>
+                </div>
               </div>
             </article>
           ))}
