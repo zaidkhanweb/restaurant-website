@@ -113,20 +113,20 @@ export function ReservationModal({ open, onOpenChange }: ReservationModalProps) 
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md w-[calc(100%-2rem)] sm:w-full rounded-2xl border-border/60 bg-card max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-md w-[calc(100%-2rem)] sm:w-full rounded-2xl border-border/60 bg-card max-h-[calc(100dvh-1.5rem)] overflow-hidden p-5 sm:p-6">
         {status === "success" ? (
-          <div className="py-6 flex flex-col items-center text-center">
-            <div className="h-14 w-14 rounded-full bg-primary/15 flex items-center justify-center">
+          <div className="py-4 flex flex-col items-center text-center">
+            <div className="h-12 w-12 rounded-full bg-primary/15 flex items-center justify-center">
               <CheckCircle2 className="text-primary" size={30} />
             </div>
-            <h3 className="mt-5 text-xl font-bold text-cream">Reservation request received!</h3>
+            <h3 className="mt-4 text-xl font-bold text-cream">Reservation request received!</h3>
             <p className="mt-2 text-sm text-muted-foreground max-w-xs">
               Thank you, {form.name.trim().split(" ")[0]}. We'll contact you shortly to confirm your table.
             </p>
             <button
               type="button"
               onClick={() => onOpenChange(false)}
-              className="btn-primary hover:[background:var(--orange-glow)] hover:-translate-y-0.5 mt-6"
+              className="btn-primary hover:[background:var(--orange-glow)] hover:-translate-y-0.5 mt-5"
             >
               Done
             </button>
@@ -134,16 +134,16 @@ export function ReservationModal({ open, onOpenChange }: ReservationModalProps) 
         ) : (
           <>
             <DialogHeader className="text-left">
-              <div className="h-11 w-11 rounded-full bg-primary/15 flex items-center justify-center mb-1">
-                <CalendarCheck className="text-primary" size={20} />
+              <div className="h-9 w-9 rounded-full bg-primary/15 flex items-center justify-center mb-0">
+                <CalendarCheck className="text-primary" size={18} />
               </div>
-              <DialogTitle className="text-cream text-xl">Book a Table</DialogTitle>
+              <DialogTitle className="text-cream text-lg sm:text-xl">Book a Table</DialogTitle>
               <DialogDescription>
                 Fill in your details and we'll confirm your reservation shortly.
               </DialogDescription>
             </DialogHeader>
 
-            <form onSubmit={handleSubmit} noValidate className="mt-1 space-y-3.5">
+            <form onSubmit={handleSubmit} noValidate className="mt-0.5 space-y-2.5 sm:space-y-3">
               <div>
                 <Label htmlFor="res-name" className="text-cream">Full Name</Label>
                 <Input
@@ -152,7 +152,7 @@ export function ReservationModal({ open, onOpenChange }: ReservationModalProps) 
                   onChange={(e) => setField("name", e.target.value)}
                   placeholder="John Smith"
                   aria-invalid={!!errors.name}
-                  className="mt-1.5 bg-secondary/40 border-border/60 text-cream placeholder:text-muted-foreground focus-visible:ring-primary/50"
+                  className="mt-1 h-9 bg-secondary/40 border-border/60 text-cream placeholder:text-muted-foreground focus-visible:ring-primary/50"
                 />
                 {errors.name && <p className="mt-1 text-xs text-red-400">{errors.name}</p>}
               </div>
@@ -166,7 +166,7 @@ export function ReservationModal({ open, onOpenChange }: ReservationModalProps) 
                   onChange={(e) => setField("phone", e.target.value)}
                   placeholder="+1 (323) 555-0100"
                   aria-invalid={!!errors.phone}
-                  className="mt-1.5 bg-secondary/40 border-border/60 text-cream placeholder:text-muted-foreground focus-visible:ring-primary/50"
+                  className="mt-1 h-9 bg-secondary/40 border-border/60 text-cream placeholder:text-muted-foreground focus-visible:ring-primary/50"
                 />
                 {errors.phone && <p className="mt-1 text-xs text-red-400">{errors.phone}</p>}
               </div>
@@ -181,7 +181,7 @@ export function ReservationModal({ open, onOpenChange }: ReservationModalProps) 
                     value={form.date}
                     onChange={(e) => setField("date", e.target.value)}
                     aria-invalid={!!errors.date}
-                    className="mt-1.5 bg-secondary/40 border-border/60 text-cream placeholder:text-muted-foreground focus-visible:ring-primary/50"
+                    className="mt-1 h-9 bg-secondary/40 border-border/60 text-cream placeholder:text-muted-foreground focus-visible:ring-primary/50"
                   />
                   {errors.date && <p className="mt-1 text-xs text-red-400">{errors.date}</p>}
                 </div>
@@ -193,7 +193,7 @@ export function ReservationModal({ open, onOpenChange }: ReservationModalProps) 
                     value={form.time}
                     onChange={(e) => setField("time", e.target.value)}
                     aria-invalid={!!errors.time}
-                    className="mt-1.5 bg-secondary/40 border-border/60 text-cream placeholder:text-muted-foreground focus-visible:ring-primary/50"
+                    className="mt-1 h-9 bg-secondary/40 border-border/60 text-cream placeholder:text-muted-foreground focus-visible:ring-primary/50"
                   />
                   {errors.time && <p className="mt-1 text-xs text-red-400">{errors.time}</p>}
                 </div>
@@ -211,7 +211,7 @@ export function ReservationModal({ open, onOpenChange }: ReservationModalProps) 
                   value={form.guests}
                   onChange={(e) => setField("guests", e.target.value)}
                   aria-invalid={!!errors.guests}
-                  className="mt-1.5 bg-secondary/40 border-border/60 text-cream placeholder:text-muted-foreground focus-visible:ring-primary/50"
+                  className="mt-1 h-9 bg-secondary/40 border-border/60 text-cream placeholder:text-muted-foreground focus-visible:ring-primary/50"
                 />
                 {errors.guests && <p className="mt-1 text-xs text-red-400">{errors.guests}</p>}
               </div>
@@ -226,14 +226,14 @@ export function ReservationModal({ open, onOpenChange }: ReservationModalProps) 
                   onChange={(e) => setField("message", e.target.value)}
                   placeholder="Window seat, allergies, celebration…"
                   rows={2}
-                  className="mt-1.5 resize-none bg-secondary/40 border-border/60 text-cream placeholder:text-muted-foreground focus-visible:ring-primary/50"
+                  className="mt-1 resize-none bg-secondary/40 border-border/60 text-cream placeholder:text-muted-foreground focus-visible:ring-primary/50"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={status === "submitting"}
-                className="btn-primary hover:[background:var(--orange-glow)] hover:-translate-y-0.5 w-full disabled:opacity-80 disabled:pointer-events-none"
+                className="btn-primary hover:[background:var(--orange-glow)] hover:-translate-y-0.5 w-full py-3 disabled:opacity-80 disabled:pointer-events-none"
               >
                 {status === "submitting" ? "Sending request…" : "Request Reservation"}
               </button>
