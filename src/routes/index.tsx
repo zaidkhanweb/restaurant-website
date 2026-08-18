@@ -9,6 +9,7 @@ import interiorImg from "@/assets/interior.jpg";
 import { CartProvider, useCart, type Product } from "@/lib/cart-context";
 import { ProductModal } from "@/components/ProductModal";
 import { CartSheet } from "@/components/CartSheet";
+import { ReservationModal } from "@/components/ReservationModal";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -40,6 +41,7 @@ function HomeContent() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isReservationOpen, setIsReservationOpen] = useState(false);
   const { addItem } = useCart();
 
   const handleSelectProduct = (product: Product) => {
@@ -49,8 +51,8 @@ function HomeContent() {
 
   return (
     <main className="min-h-screen">
-      <Nav onCartClick={() => setIsCartOpen(true)} />
-      <Hero />
+      <Nav onCartClick={() => setIsCartOpen(true)} onReserveClick={() => setIsReservationOpen(true)} />
+      <Hero onReserveClick={() => setIsReservationOpen(true)} />
       <Features />
       <Specials onSelectProduct={handleSelectProduct} />
       <About />
@@ -64,11 +66,12 @@ function HomeContent() {
         onAddToCart={addItem}
       />
       <CartSheet open={isCartOpen} onOpenChange={setIsCartOpen} />
+      <ReservationModal open={isReservationOpen} onOpenChange={setIsReservationOpen} />
     </main>
   );
 }
 
-function Nav({ onCartClick }: { onCartClick: () => void }) {
+function Nav({ onCartClick, onReserveClick }: { onCartClick: () => void; onReserveClick: () => void }) {
   const { totalItems } = useCart();
   return (
     <header className="absolute top-0 inset-x-0 z-50">
@@ -112,12 +115,13 @@ function Nav({ onCartClick }: { onCartClick: () => void }) {
               </span>
             )}
           </button>
-          <a
-            href="#contact"
+          <button
+            type="button"
+            onClick={onReserveClick}
             className="hidden sm:inline-flex btn-primary hover:[background:var(--orange-glow)] hover:-translate-y-0.5"
           >
             Book a Table
-          </a>
+          </button>
         </div>
       </div>
     </header>
@@ -134,7 +138,7 @@ function DividerDashes() {
   );
 }
 
-function Hero() {
+function Hero({ onReserveClick }: { onReserveClick: () => void }) {
   return (
     <section id="top" className="relative min-h-screen overflow-hidden pt-28 pb-20">
       <div className="absolute inset-0">
@@ -158,7 +162,9 @@ function Hero() {
             <a href="#menu" className="btn-primary hover:[background:var(--orange-glow)] hover:-translate-y-0.5">
               View Menu <ArrowRight size={14} />
             </a>
-            <a href="#contact" className="btn-ghost hover:bg-cream hover:text-background">Reserve Now</a>
+            <button type="button" onClick={onReserveClick} className="btn-ghost hover:bg-cream hover:text-background">
+              Reserve Now
+            </button>
           </div>
         </div>
       </div>
