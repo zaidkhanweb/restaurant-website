@@ -10,6 +10,7 @@ import { CartProvider, useCart, type Product } from "@/lib/cart-context";
 import { ProductModal } from "@/components/ProductModal";
 import { CartSheet } from "@/components/CartSheet";
 import { ReservationModal } from "@/components/ReservationModal";
+import { CartFab } from "@/components/CartFab";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -42,11 +43,18 @@ function HomeContent() {
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isReservationOpen, setIsReservationOpen] = useState(false);
+  const [showAddedToast, setShowAddedToast] = useState(false);
   const { addItem } = useCart();
 
   const handleSelectProduct = (product: Product) => {
     setSelectedProduct(product);
     setIsProductModalOpen(true);
+  };
+
+  const handleAddToCart = (product: Product, quantity: number) => {
+    addItem(product, quantity);
+    setShowAddedToast(true);
+    window.setTimeout(() => setShowAddedToast(false), 1800);
   };
 
   return (
@@ -63,10 +71,20 @@ function HomeContent() {
         product={selectedProduct}
         open={isProductModalOpen}
         onOpenChange={setIsProductModalOpen}
-        onAddToCart={addItem}
+        onAddToCart={handleAddToCart}
       />
       <CartSheet open={isCartOpen} onOpenChange={setIsCartOpen} />
       <ReservationModal open={isReservationOpen} onOpenChange={setIsReservationOpen} />
+
+      <CartFab onClick={() => setIsCartOpen(true)} />
+      {showAddedToast && (
+        <div
+          role="status"
+          className="fixed bottom-24 right-6 z-40 rounded-full bg-cream text-background text-sm font-semibold px-4 py-2.5 shadow-xl animate-in fade-in slide-in-from-bottom-2"
+        >
+          Added to cart
+        </div>
+      )}
     </main>
   );
 }
