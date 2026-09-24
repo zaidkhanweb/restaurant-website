@@ -7,15 +7,15 @@ export type ReservationRequest = {
   message?: string;
 };
 
-const FORMSPREE_ENDPOINT = "https://formspree.io/f/xljeabwj";
+const N8N_RESERVATION_WEBHOOK = "https://steering-stranger-oops-reviewer.trycloudflare.com/webhook/restaurant-reservation";
 
 /**
  * Clean abstraction point for the reservation form's submission.
- * Currently sends to Formspree — the UI never needs to change, it only
- * cares whether this resolves or throws.
+ * Sends reservation requests to the n8n webhook. The UI never needs to change;
+ * it only cares whether this resolves or throws.
  */
 export async function submitReservation(data: ReservationRequest): Promise<{ ok: true }> {
-  const response = await fetch(FORMSPREE_ENDPOINT, {
+  const response = await fetch(N8N_RESERVATION_WEBHOOK, {
     method: "POST",
     headers: { "Content-Type": "application/json", Accept: "application/json" },
     body: JSON.stringify({
